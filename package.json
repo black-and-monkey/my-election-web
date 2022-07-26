@@ -7,16 +7,11 @@
   },
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
-    "build": "ng build",
+    "start": "node server.js",
+    "build": "ng build --prod",
     "test": "ng test",
-    "test:ci": "ng test --no-watch --no-progress --browsers=ChromeHeadlessCI",
     "lint": "ng lint",
-    "e2e": "ng e2e",
-    "server:app": "node server.js",
-    "server:api": "node api-server.js",
-    "dev": "npm-run-all --parallel start server:api",
-    "prod": "npm-run-all --parallel server:app server:api"
+    "e2e": "ng e2e"
   },
   "private": true,
   "dependencies": {
