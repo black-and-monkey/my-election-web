@@ -14,3 +14,6 @@
 
 *.iml
 /package-lock.json
+.angular
+
+dist

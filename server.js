@@ -10,10 +10,10 @@ const express = require('express');
 const app = express();
 
 app.use(requireHTTPS);
-app.use(express.static('./dist/angular-heroku'));
+app.use(express.static('./dist/my-election'));
 
 app.get('/*', (req, res) =>
-    res.sendFile('index.html', {root: 'dist/login-demo/'}),
+    res.sendFile('index.html', {root: 'dist/my-election/'}),
 );
 
 app.listen(process.env.PORT || 8080);
