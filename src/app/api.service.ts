@@ -10,7 +10,7 @@ export class ApiService {
   constructor(private http: HttpClient) {}
 
   ping$(): Observable<any> {
-    console.log(config.apiUri);
-    return this.http.get(`${config.apiUri}/api/external`);
+    console.log(`https://my-election-api.herokuapp.com/`);
+    return this.http.get(`https://my-election-api.herokuapp.com//api/external`);
   }
 }
