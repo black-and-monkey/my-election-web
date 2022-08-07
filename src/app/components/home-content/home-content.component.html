@@ -1,64 +1,71 @@
-<div class="next-steps my-5">
-    <h2 class="my-5 text-center">What can I do next?</h2>
+<div class="nav-item" *ngIf="(auth.isAuthenticated$ | async) && myCrv != null">
 
-    <div class="row">
-      <div class="col-md-5 mb-4">
-        <h6 class="mb-3">
-          <a href="https://auth0.com/docs/connections">
-            <fa-icon [icon]="faLink"></fa-icon> Configure other identity providers
-          </a>
-        </h6>
-        <p>
-          Auth0 supports social providers as Facebook, Twitter, Instagram and
-          100+, Enterprise providers as Microsoft Office 365, Google Apps, Azure,
-          and more. You can also use any OAuth2 Authorization Server.
-        </p>
-      </div>
+    <mat-tab-group class="invisible-tabs" [selectedIndex]="selected.value">
+        <mat-tab label="Home">
+            <div>
+                <button mat-fab color="warn" aria-label="refresh" (click)="findMyCrv()">
+                    <mat-icon>refresh</mat-icon>
+                </button>
+                {{myCrv.description}}
+            </div>
+            <br>
+            <div>
+                <button mat-raised-button color="primary" [disabled]="myCrv.opened" (click)="openCrv()">Abrir CRV</button>
+            </div>
+            <br>
+            <div>
+                <button mat-raised-button color="primary" (click)="navigate(1)">Registrar VOTO</button>
+            </div>
+            <br>
+            <div>
+                <button mat-raised-button color="primary">Consultar lista ordinal</button>
+            </div>
+            <br>
+            <div>
+                <button mat-raised-button color="primary">Agregar nota</button>
+            </div>
+            <br>
+            <div>
+                <button mat-raised-button color="primary" [disabled]="!myCrv.opened" (click)="closeCrv()" >Cerrar CRV</button>
+            </div>
+        </mat-tab>
 
-      <div class="col-md"></div>
+        <mat-tab label="Vote">
 
-      <div class="col-md-5 mb-4">
-        <h6 class="mb-3">
-          <a href="https://auth0.com/docs/multifactor-authentication">
-            <fa-icon [icon]="faLink"></fa-icon> Enable Multifactor Authentication
-          </a>
-        </h6>
-        <p>
-          Add an extra layer of security by enabling Multi-factor Authentication,
-          requiring your users to provide more than one piece of identifying
-          information. Push notifications, authenticator apps, SMS, and DUO
-          Security are supported.
-        </p>
-      </div>
-    </div>
+            <form [formGroup]="voteRegistrationForm" (ngSubmit)="submit(voteRegistrationForm)">
 
-    <div class="row">
-      <div class="col-md-5 mb-4">
-        <h6 class="mb-3">
-          <a href="https://auth0.com/docs/anomaly-detection">
-            <fa-icon [icon]="faLink"></fa-icon> Anomaly Detection
-          </a>
-        </h6>
-        <p>
-          Auth0 can detect anomalies and stop malicious attempts to access your
-          application. Anomaly detection can alert you and your users of
-          suspicious activity, as well as block further login attempts.
-        </p>
-      </div>
+                <mat-form-field class="example-full-width" appearance="fill">
+                    <mat-label>Nombre completo</mat-label>
+                    <input matInput placeholder="" formControlName="name" #nameInput>
+                    <mat-error>Nombre completo es requerido</mat-error>
+                </mat-form-field>
 
-      <div class="col-md"></div>
+                <mat-form-field class="example-full-width" appearance="fill">
+                    <mat-label>Número cédula</mat-label>
+                    <input matInput placeholder="" formControlName="ci" #ciInput>
+                    <mat-error>cédula es requerida</mat-error>
+                </mat-form-field>
 
-      <div class="col-md-5 mb-4">
-        <h6 class="mb-3">
-          <a href="https://auth0.com/docs/rules">
-            <fa-icon [icon]="faLink"></fa-icon> Learn About Rules
-          </a>
-        </h6>
-        <p>
-          Rules are JavaScript functions that execute when a user authenticates to
-          your application. They run once the authentication process is complete,
-          and you can use them to customize and extend Auth0's capabilities.
-        </p>
-      </div>
-    </div>
-  </div>
+                <mat-form-field class="example-full-width" appearance="standard">
+                    <mat-label>Choose a date</mat-label>
+                    <input matInput [matDatepicker]="picker" formControlName="dob">
+                    <mat-hint>MM/DD/YYYY</mat-hint>
+                    <mat-datepicker #picker></mat-datepicker>
+                </mat-form-field>
+                <button mat-raised-button (click)="picker.open()">Calendario</button>
+
+               <br>
+
+                <div mat-dialog-actions >
+                    <button mat-raised-button color="warn" (click)="navigate(0)" >Cancelar</button>
+                    <button mat-raised-button color="primary" type="submit">Registrar</button>
+                </div>
+
+            </form>
+
+        </mat-tab>
+
+
+    </mat-tab-group>
+
+</div>

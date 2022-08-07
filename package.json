@@ -8,6 +8,7 @@
   "scripts": {
     "ng": "ng",
     "start": "node server.js",
+    "start:local": "ng serve --port 4200 --open",
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
