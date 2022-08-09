@@ -7,17 +7,19 @@ import {Observable} from "rxjs";
 })
 export class MyElectionApiService implements OnInit {
 
-  apiUrl = "http://localhost:3010"
+  //apiUrl = "http://localhost:3010"
+  apiUrl = "https://my-election-api.herokuapp.com"
 
-  constructor (
+  constructor(
       protected readonly http: HttpClient
-  ) {}
+  ) {
+  }
 
   ngOnInit() {
 
   }
 
-  public findMyCrv(token? : string) : Observable<CrvResponse> {
+  public findMyCrv(token?: string): Observable<CrvResponse> {
     return this.http.get<CrvResponse>(this.apiUrl + '/api/v1/crv-lookup/my-crv',  this.buildOptions(token));
   }
 
@@ -30,7 +32,6 @@ export class MyElectionApiService implements OnInit {
   }
 
   public voteRegistration(token?: string, body?: any): Observable<BaseResponse> {
-    console.log(body)
     return this.http.post<BaseResponse>(this.apiUrl + '/api/v1/vote-registration',  body, this.buildOptions(token));
   }
 

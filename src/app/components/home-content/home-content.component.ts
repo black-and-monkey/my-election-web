@@ -1,9 +1,9 @@
-import { Component, OnInit } from '@angular/core';
-import { faLink } from '@fortawesome/free-solid-svg-icons';
+import {Component, OnInit} from '@angular/core';
+import {faLink} from '@fortawesome/free-solid-svg-icons';
 import {AuthService} from "@auth0/auth0-angular";
 import {CrvResponse, MyElectionApiService} from "../../services/my-election-api.service";
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
-import {DateAdapter} from "@angular/material/core";
+import {NotificationService} from "../../services/notification.service";
 
 @Component({
   selector: 'app-home-content',
@@ -13,9 +13,10 @@ import {DateAdapter} from "@angular/material/core";
 export class HomeContentComponent implements OnInit {
   faLink = faLink;
 
-  constructor( public auth: AuthService,
-               private myElectionApiService: MyElectionApiService,
-               private fb: FormBuilder) {
+  constructor(public auth: AuthService,
+              private myElectionApiService: MyElectionApiService,
+              private fb: FormBuilder,
+              private notificationService: NotificationService) {
   }
 
 
@@ -65,14 +66,22 @@ export class HomeContentComponent implements OnInit {
     this.selected.setValue(number);
   }
 
-  submit(voteRegistrationForm: FormGroup) {
 
-    this.myElectionApiService.voteRegistration(this.token,  {
-      dob: voteRegistrationForm.controls["dob"].value,
+  submit(voteRegistrationForm: FormGroup) {
+    this.myElectionApiService.voteRegistration(this.token, {
+      dob: voteRegistrationForm.controls["dob"].value.format('YYYY-MM-DD'),
       ci: voteRegistrationForm.controls["ci"].value,
       fullName: voteRegistrationForm.controls["name"].value
-    }).subscribe(x => {
-        this.navigate(0);
-    });
+    }).subscribe(response => {
+          this.notificationService.show("votante registrado con exito !")
+          this.navigate(0);
+          voteRegistrationForm.reset()
+        }
+    );
+  }
+
+  cancel() {
+    this.navigate(0);
+    this.voteRegistrationForm.reset();
   }
 }
