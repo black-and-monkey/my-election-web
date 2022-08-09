@@ -3,6 +3,7 @@ import { faLink } from '@fortawesome/free-solid-svg-icons';
 import {AuthService} from "@auth0/auth0-angular";
 import {CrvResponse, MyElectionApiService} from "../../services/my-election-api.service";
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
+import {DateAdapter} from "@angular/material/core";
 
 @Component({
   selector: 'app-home-content',
@@ -14,7 +15,9 @@ export class HomeContentComponent implements OnInit {
 
   constructor( public auth: AuthService,
                private myElectionApiService: MyElectionApiService,
-               private fb: FormBuilder) { }
+               private fb: FormBuilder) {
+  }
+
 
   myCrv: CrvResponse;
   token: string;
