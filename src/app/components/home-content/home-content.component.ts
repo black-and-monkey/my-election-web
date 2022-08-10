@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
 import {faLink} from '@fortawesome/free-solid-svg-icons';
 import {AuthService} from "@auth0/auth0-angular";
 import {CrvResponse, MyElectionApiService, Vote} from "../../services/my-election-api.service";
@@ -6,14 +6,14 @@ import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {NotificationService} from "../../services/notification.service";
 import {MatTableDataSource} from "@angular/material/table";
 import {MatSort} from "@angular/material/sort";
-import {MatPaginator} from "@angular/material/paginator";
+import {MatPaginator, PageEvent} from "@angular/material/paginator";
 
 @Component({
     selector: 'app-home-content',
     templateUrl: './home-content.component.html',
     styleUrls: ['./home-content.component.css']
 })
-export class HomeContentComponent implements OnInit {
+export class HomeContentComponent implements OnInit, AfterViewInit {
     faLink = faLink;
 
     constructor(public auth: AuthService,
@@ -21,7 +21,6 @@ export class HomeContentComponent implements OnInit {
                 private fb: FormBuilder,
                 private notificationService: NotificationService) {
     }
-
 
     myCrv: CrvResponse;
     token: string;
@@ -34,6 +33,12 @@ export class HomeContentComponent implements OnInit {
     dataSource: MatTableDataSource<Vote>;
     @ViewChild(MatPaginator) paginator: MatPaginator;
     @ViewChild(MatSort) sort: MatSort;
+
+    pageInfo: PageInfo = {
+        pageIndex: 0,
+        pageSize: 25,
+        total: 0
+    }
 
     ngOnInit() {
 
@@ -50,50 +55,51 @@ export class HomeContentComponent implements OnInit {
             this.token = x.__raw;
             this.findMyCrv();
         })
-
-        // this.dataSource.paginator = this.paginator;
-        //this.dataSource.sort = this.sort;
     }
 
-  findMyCrv() {
-      this.loading = true;
-      this.myElectionApiService.findMyCrv(this.token).subscribe(crv => {
-          console.log("CRV: " + JSON.stringify(crv))
-          this.loading = false;
-          this.myCrv = crv;
-      })
-  }
+    ngAfterViewInit() {
 
-  openCrv() {
-    this.myElectionApiService.openCrv(this.token).subscribe(x => {
-      this.findMyCrv();
-    })
+    }
 
-  }
+    findMyCrv() {
+        this.loading = true;
+        this.myElectionApiService.findMyCrv(this.token).subscribe(crv => {
+            console.log("CRV: " + JSON.stringify(crv))
+            this.loading = false;
+            this.myCrv = crv;
+        })
+    }
 
-  closeCrv() {
-    this.myElectionApiService.closeCrv(this.token).subscribe(x => {
-      this.findMyCrv();
-    })
-  }
+    openCrv() {
+        this.myElectionApiService.openCrv(this.token).subscribe(x => {
+            this.findMyCrv();
+        })
 
-  navigate(number: number) {
-    this.selected.setValue(number);
-  }
+    }
+
+    closeCrv() {
+        this.myElectionApiService.closeCrv(this.token).subscribe(x => {
+            this.findMyCrv();
+        })
+    }
+
+    navigate(number: number) {
+        this.selected.setValue(number);
+    }
 
 
-  submit(voteRegistrationForm: FormGroup) {
-    this.myElectionApiService.voteRegistration(this.token, {
-      dob: voteRegistrationForm.controls["dob"].value.format('YYYY-MM-DD'),
-      ci: voteRegistrationForm.controls["ci"].value,
-      fullName: voteRegistrationForm.controls["name"].value
-    }).subscribe(response => {
-          this.notificationService.show("votante registrado con exito !")
-            this.navigate(0);
-            voteRegistrationForm.reset()
-        }
-    );
-  }
+    submit(voteRegistrationForm: FormGroup) {
+        this.myElectionApiService.voteRegistration(this.token, {
+            dob: voteRegistrationForm.controls["dob"].value.format('YYYY-MM-DD'),
+            ci: voteRegistrationForm.controls["ci"].value,
+            fullName: voteRegistrationForm.controls["name"].value
+        }).subscribe(response => {
+                this.notificationService.show("votante registrado con exito !")
+                this.navigate(0);
+                voteRegistrationForm.reset()
+            }
+        );
+    }
 
     cancel() {
         this.goHome()
@@ -105,9 +111,43 @@ export class HomeContentComponent implements OnInit {
     }
 
     findVotes() {
-        this.myElectionApiService.findRegisteredVotes(this.token, 0, 50).subscribe(response => {
+
+        this.myElectionApiService.findRegisteredVotes(this.token, this.pageInfo.pageIndex, this.pageInfo.pageSize).subscribe(response => {
             this.dataSource = new MatTableDataSource(response.votes);
+            this.pageInfo.total = response.total;
+            this.dataSource.sort = this.sort;
+            this.dataSource.paginator = this.paginator;
+            this.setPaginatorActions();
+            this.setSortActions();
+            this.navigate(2);
         });
+    }
+
+    setPaginatorActions() {
+        this.paginator.page.subscribe((evt: PageEvent) => {
+            this.pageInfo.pageIndex = evt.pageIndex
+            this.pageInfo.pageSize = evt.pageSize
+            this.refreshVoteList()
+        });
+    }
+
+    setSortActions() {
+        this.sort.sortChange.subscribe(() => {
+            // Paginator update
+            this.paginator.pageIndex = 0;
+            this.pageInfo.pageIndex = 0;
+
+            // Sort update
+            this.pageInfo.orderColumn = this.sort.direction && this.sort.active;
+            this.pageInfo.orderDirection = this.sort.direction;
+        });
+    }
+
+    private refreshVoteList() {
+        this.myElectionApiService.findRegisteredVotes(this.token, this.pageInfo.pageIndex, this.pageInfo.pageSize).subscribe(response => {
+            this.dataSource = new MatTableDataSource(response.votes);
+            this.pageInfo.total = response.total;
+        })
     }
 
     applyFilter(event: Event) {
@@ -119,5 +159,13 @@ export class HomeContentComponent implements OnInit {
         }
     }
 
+}
 
+
+export interface PageInfo {
+    pageIndex: number;
+    pageSize: number;
+    orderColumn?: string;
+    orderDirection?: 'asc' | 'desc' | '';
+    total: number;
 }
