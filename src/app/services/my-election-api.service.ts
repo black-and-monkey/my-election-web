@@ -16,19 +16,22 @@ export class MyElectionApiService implements OnInit {
   }
 
   ngOnInit() {
-
   }
 
   public findMyCrv(token?: string): Observable<CrvResponse> {
-    return this.http.get<CrvResponse>(this.apiUrl + '/api/v1/crv-lookup/my-crv',  this.buildOptions(token));
+    return this.http.get<CrvResponse>(this.apiUrl + '/api/v1/crv-lookup/my-crv', this.buildOptions(token));
   }
 
-  public openCrv(token? : string) : Observable<BaseResponse> {
-    return this.http.post<BaseResponse>(this.apiUrl + '/api/v1/open-crv',  {}, this.buildOptions(token));
+  public findRegisteredVotes(token?: string, page?: number, size?: number): Observable<RegisteredVotesResponse> {
+    return this.http.get<RegisteredVotesResponse>(this.apiUrl + '/api/v1/crv-lookup/registered-votes?page=' + page + '&size=' + size, this.buildOptions(token));
   }
 
-  public closeCrv(token? : string) : Observable<BaseResponse> {
-    return this.http.put<BaseResponse>(this.apiUrl + '/api/v1/close-crv',  {}, this.buildOptions(token));
+  public openCrv(token?: string): Observable<BaseResponse> {
+    return this.http.post<BaseResponse>(this.apiUrl + '/api/v1/open-crv', {}, this.buildOptions(token));
+  }
+
+  public closeCrv(token?: string): Observable<BaseResponse> {
+    return this.http.put<BaseResponse>(this.apiUrl + '/api/v1/close-crv', {}, this.buildOptions(token));
   }
 
   public voteRegistration(token?: string, body?: any): Observable<BaseResponse> {
@@ -53,4 +56,17 @@ export interface CrvResponse {
   description: string;
   opened: boolean
   message: string
+}
+
+export interface RegisteredVotesResponse {
+  total: number
+  votes: Vote[]
+}
+
+export interface Vote {
+  "voteNumber": number,
+  "fullName": string,
+  "dob": any,
+  "ci": string,
+  "timestamp": any
 }

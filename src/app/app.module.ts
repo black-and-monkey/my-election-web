@@ -6,13 +6,11 @@ import {FontAwesomeModule} from '@fortawesome/angular-fontawesome';
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
 import {HomeComponent} from './pages/home/home.component';
-import {ProfileComponent} from './pages/profile/profile.component';
 import {ErrorComponent} from './pages/error/error.component';
 import {NavBarComponent} from './components/nav-bar/nav-bar.component';
 import {FooterComponent} from './components/footer/footer.component';
 import {HomeContentComponent} from './components/home-content/home-content.component';
 import {LoadingComponent} from './components/loading/loading.component';
-import {ExternalApiComponent} from './pages/external-api/external-api.component';
 import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import {AuthHttpInterceptor, AuthModule} from '@auth0/auth0-angular';
 import {environment as env} from '../environments/environment';
@@ -106,12 +104,10 @@ const MY_DATE_FORMAT = {
   declarations: [
     AppComponent,
     HomeComponent,
-    ProfileComponent,
     NavBarComponent,
     FooterComponent,
     HomeContentComponent,
     LoadingComponent,
-    ExternalApiComponent,
     ErrorComponent
   ],
   imports: [
