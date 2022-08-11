@@ -29,7 +29,7 @@ export class HomeContentComponent implements OnInit, AfterViewInit {
     loading: boolean;
 
     // table tab view
-    displayedColumns: string[] = ['voteNumber', 'fullName', 'dob', 'ci', 'timestamp'];
+    displayedColumns: string[] = ['voteNumber', 'fullName', 'dob', 'ci'/*, 'timestamp'*/];
     dataSource: MatTableDataSource<Vote>;
     @ViewChild(MatPaginator) paginator: MatPaginator;
     @ViewChild(MatSort) sort: MatSort;
