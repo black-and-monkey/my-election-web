@@ -68,11 +68,14 @@ export class HomeContentComponent implements OnInit, AfterViewInit {
     }
 
     ngAfterViewInit() {
+    }
 
+    home() {
+        this.navigate(0);
+        this.loading = true;
     }
 
     findMyCrv() {
-        this.loading = true;
         this.myElectionApiService.findMyCrv(this.token).subscribe(crv => {
             console.log("CRV: " + JSON.stringify(crv))
             this.loading = false;
@@ -92,15 +95,15 @@ export class HomeContentComponent implements OnInit, AfterViewInit {
     }
 
 
-    submitVoter(voteRegistrationForm: FormGroup) {
+    submitVoter() {
         this.myElectionApiService.voteRegistration(this.token, {
-            dob: voteRegistrationForm.controls["dob"].value.format('YYYY-MM-DD'),
-            ci: voteRegistrationForm.controls["ci"].value,
-            fullName: voteRegistrationForm.controls["name"].value
+            dob: this.voteRegistrationForm.controls["dob"].value.format('YYYY-MM-DD'),
+            ci: this.voteRegistrationForm.controls["ci"].value,
+            fullName: this.voteRegistrationForm.controls["name"].value
         }).subscribe(response => {
                 this.notificationService.show("votante registrado con exito !")
                 this.navigate(0);
-                voteRegistrationForm.reset()
+                this.voteRegistrationForm.reset()
             }
         );
     }
@@ -179,25 +182,28 @@ export class HomeContentComponent implements OnInit, AfterViewInit {
         }
     }
 
-    submitCrvClose(closeForm: FormGroup) {
+    submitCrvClose() {
         this.myElectionApiService.closeCrv(this.token, {
-            note: closeForm.controls["note"].value
+            note: this.closeForm.controls["note"].value
         }).subscribe(response => {
                 this.notificationService.show("CRV cerrada con exito !")
-                this.navigate(0);
-                this.findMyCrv();
-                closeForm.reset()
+                this.home()
+                this.closeForm.reset()
             }
         );
     }
 
     tabClick(tabEvent: MatTabChangeEvent) {
-        if (tabEvent.index + 1 == 5) { // means cierre
+        console.info("tab selected: " + tabEvent.index)
+        if (tabEvent.index == 4) { // means cierre
             // TODO create an better endpoint for getting the totals
             this.myElectionApiService.findRegisteredVotes(this.token, 0, 1).subscribe(response => {
                 this.dataSource = new MatTableDataSource(response.votes);
                 this.pageInfo.total = response.total;
             })
+        } else if (tabEvent.index == 0) {
+            this.loading = true;
+            this.findMyCrv();
         }
     }
 }

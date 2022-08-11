@@ -20,11 +20,11 @@
             </div>
             <br>
             <div>
-                <button mat-raised-button color="primary" (click)="navigate(4)">Agregar nota</button>
+                <button mat-raised-button color="primary" (click)="navigate(3)">Agregar nota</button>
             </div>
             <br>
             <div>
-                <button mat-raised-button color="primary" [disabled]="!myCrv.opened" (click)="navigate(5)">Cerrar CRV
+                <button mat-raised-button color="primary" [disabled]="!myCrv.opened" (click)="navigate(4)">Cerrar CRV
                 </button>
             </div>
             <div>
@@ -37,7 +37,7 @@
 
         <mat-tab label="Vote">
 
-            <form [formGroup]="voteRegistrationForm" (ngSubmit)="submitVoter(voteRegistrationForm)">
+            <form [formGroup]="voteRegistrationForm">
 
                 <mat-form-field class="example-full-width" appearance="fill">
                     <mat-label>Nombre completo</mat-label>
@@ -65,7 +65,8 @@
 
                 <div mat-dialog-actions>
                     <button mat-raised-button color="warn" (click)="cancel()" style="float: left;">Cancelar</button>
-                    <button mat-raised-button color="primary" type="submit" style="float: right;">Registrar</button>
+                    <button mat-raised-button color="primary" (click)="submitVoter()" style="float: right;">Registrar
+                    </button>
                 </div>
 
             </form>
@@ -162,7 +163,7 @@
                 <p>Tenga presente que no se podrán ingresar más votantes después de realizada esta acción</p>
             </div>
 
-            <form [formGroup]="closeForm" (ngSubmit)="submitCrvClose(closeForm)">
+            <form [formGroup]="closeForm">
 
                 <mat-form-field class="example-full-width" appearance="fill">
                     <mat-label>Agrega una nota de cierre</mat-label>
@@ -179,7 +180,9 @@
 
                 <div mat-dialog-actions>
                     <button mat-raised-button color="warn" (click)="cancel()" style="float: left;">Cancelar</button>
-                    <button mat-raised-button color="primary" type="submit" style="float: right;">Continuar</button>
+                    <button mat-raised-button color="primary" (click)="submitCrvClose()" style="float: right;">
+                        Continuar
+                    </button>
                 </div>
 
             </form>
