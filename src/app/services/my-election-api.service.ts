@@ -30,21 +30,27 @@ export class MyElectionApiService implements OnInit {
     return this.http.post<BaseResponse>(this.apiUrl + '/api/v1/open-crv', {}, this.buildOptions(token));
   }
 
-  public closeCrv(token?: string): Observable<BaseResponse> {
-    return this.http.put<BaseResponse>(this.apiUrl + '/api/v1/close-crv', {}, this.buildOptions(token));
+  public closeCrv(token?: string, body?: Note): Observable<BaseResponse> {
+    return this.http.put<BaseResponse>(this.apiUrl + '/api/v1/close-crv', body, this.buildOptions(token));
   }
 
   public voteRegistration(token?: string, body?: any): Observable<BaseResponse> {
-    return this.http.post<BaseResponse>(this.apiUrl + '/api/v1/vote-registration',  body, this.buildOptions(token));
+    return this.http.post<BaseResponse>(this.apiUrl + '/api/v1/vote-registration', body, this.buildOptions(token));
   }
 
-  private buildOptions(token? : string) {
+  public addNote(token?: string, body?: Note): Observable<BaseResponse> {
+    return this.http.post<BaseResponse>(this.apiUrl + '/api/v1/note', body, this.buildOptions(token));
+  }
+
+  private buildOptions(token?: string) {
     return {
       headers: new HttpHeaders({
-        'Content-Type':  'application/json',
-        Authorization: 'bearer '+ token
-      })};
+        'Content-Type': 'application/json',
+        Authorization: 'bearer ' + token
+      })
+    };
   }
+
 }
 
 export interface BaseResponse {
@@ -69,4 +75,8 @@ export interface Vote {
   "dob": any,
   "ci": string,
   "timestamp": any
+}
+
+export interface Note {
+  note: string;
 }

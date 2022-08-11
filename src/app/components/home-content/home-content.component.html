@@ -1,13 +1,14 @@
 <div class="nav-item" *ngIf="(auth.isAuthenticated$ | async) && myCrv != null">
 
-    <mat-tab-group class="invisible-tabs" [selectedIndex]="selected.value">
+    <mat-tab-group class="invisible-tabs" [selectedIndex]="selected.value" (selectedTabChange)="tabClick($event)">
 
         <mat-spinner disabled="!loading"></mat-spinner>
 
         <mat-tab label="Home">
             <br>
             <div>
-                <button mat-raised-button color="primary" [disabled]="myCrv.opened" (click)="openCrv()">Abrir CRV</button>
+                <button mat-raised-button color="primary" [disabled]="myCrv.opened" (click)="openCrv()">Abrir CRV
+                </button>
             </div>
             <br>
             <div>
@@ -19,11 +20,11 @@
             </div>
             <br>
             <div>
-                <button mat-raised-button color="primary">Agregar nota</button>
+                <button mat-raised-button color="primary" (click)="navigate(4)">Agregar nota</button>
             </div>
             <br>
             <div>
-                <button mat-raised-button color="primary" [disabled]="!myCrv.opened" (click)="closeCrv()">Cerrar CRV
+                <button mat-raised-button color="primary" [disabled]="!myCrv.opened" (click)="navigate(5)">Cerrar CRV
                 </button>
             </div>
             <div>
@@ -36,7 +37,7 @@
 
         <mat-tab label="Vote">
 
-            <form [formGroup]="voteRegistrationForm" (ngSubmit)="submit(voteRegistrationForm)">
+            <form [formGroup]="voteRegistrationForm" (ngSubmit)="submitVoter(voteRegistrationForm)">
 
                 <mat-form-field class="example-full-width" appearance="fill">
                     <mat-label>Nombre completo</mat-label>
@@ -63,8 +64,8 @@
                 <br>
 
                 <div mat-dialog-actions>
-                    <button mat-raised-button color="primary" type="submit">Registrar</button>
-                    <button mat-raised-button color="warn" (click)="cancel()" style="float: right;">Cancelar</button>
+                    <button mat-raised-button color="warn" (click)="cancel()" style="float: left;">Cancelar</button>
+                    <button mat-raised-button color="primary" type="submit" style="float: right;">Registrar</button>
                 </div>
 
             </form>
@@ -127,13 +128,61 @@
 
 
             <br>
-            <mat-chip color="primary">
+            <button mat-raised-button color="warn" (click)="goHome()" style="float: left;">Volver</button>
+            <mat-chip color="primary" style="float: right;">
                 Total CRV: {{pageInfo.total}}
             </mat-chip>
 
+        </mat-tab>
 
-            <button mat-raised-button color="warn" (click)="goHome()" style="float: right;">Volver</button>
+        <mat-tab label="Comment">
 
+            <form [formGroup]="noteForm" (ngSubmit)="submitNote(noteForm)">
+
+                <mat-form-field class="example-full-width" appearance="fill">
+                    <mat-label>Agrega una nota a tu CRV</mat-label>
+                    <textarea matInput placeholder="..." formControlName="note"></textarea>
+                </mat-form-field>
+
+                <br>
+
+                <div mat-dialog-actions>
+                    <button mat-raised-button color="warn" (click)="cancel()" style="float: left;">Cancelar</button>
+                    <button mat-raised-button color="primary" type="submit" style="float: right;">Registrar</button>
+                </div>
+
+            </form>
+
+        </mat-tab>
+
+        <mat-tab label="close">
+
+            <div>
+                <p>¿Confirma el cierre de la CRV?</p>
+                <p>Tenga presente que no se podrán ingresar más votantes después de realizada esta acción</p>
+            </div>
+
+            <form [formGroup]="closeForm" (ngSubmit)="submitCrvClose(closeForm)">
+
+                <mat-form-field class="example-full-width" appearance="fill">
+                    <mat-label>Agrega una nota de cierre</mat-label>
+                    <textarea matInput placeholder="Notas de cierre" formControlName="note"></textarea>
+                </mat-form-field>
+
+                <br>
+
+                <div>
+                    <p>Total de electores registrados en la CRV</p>
+                    <p>{{pageInfo.total}}</p>
+                    <p>El número debe coincidir con el total de la cuaderneta</p>
+                </div>
+
+                <div mat-dialog-actions>
+                    <button mat-raised-button color="warn" (click)="cancel()" style="float: left;">Cancelar</button>
+                    <button mat-raised-button color="primary" type="submit" style="float: right;">Continuar</button>
+                </div>
+
+            </form>
 
         </mat-tab>
 

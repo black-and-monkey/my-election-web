@@ -7,6 +7,7 @@ import {NotificationService} from "../../services/notification.service";
 import {MatTableDataSource} from "@angular/material/table";
 import {MatSort} from "@angular/material/sort";
 import {MatPaginator, PageEvent} from "@angular/material/paginator";
+import {MatTabChangeEvent} from "@angular/material/tabs";
 
 @Component({
     selector: 'app-home-content',
@@ -26,6 +27,8 @@ export class HomeContentComponent implements OnInit, AfterViewInit {
     token: string;
     selected = new FormControl(0);
     voteRegistrationForm: FormGroup = new FormGroup({});
+    noteForm: FormGroup = new FormGroup({});
+    closeForm: FormGroup = new FormGroup({});
     loading: boolean;
 
     // table tab view
@@ -50,6 +53,13 @@ export class HomeContentComponent implements OnInit, AfterViewInit {
             dob: [null, [Validators.required]]
         })
 
+        this.noteForm = this.fb.group({
+            note: [null, [Validators.required]]
+        })
+
+        this.closeForm = this.fb.group({
+            note: [null, [Validators.required]]
+        })
 
         this.auth.getIdTokenClaims().subscribe(x => {
             this.token = x.__raw;
@@ -77,18 +87,12 @@ export class HomeContentComponent implements OnInit, AfterViewInit {
 
     }
 
-    closeCrv() {
-        this.myElectionApiService.closeCrv(this.token).subscribe(x => {
-            this.findMyCrv();
-        })
-    }
-
     navigate(number: number) {
         this.selected.setValue(number);
     }
 
 
-    submit(voteRegistrationForm: FormGroup) {
+    submitVoter(voteRegistrationForm: FormGroup) {
         this.myElectionApiService.voteRegistration(this.token, {
             dob: voteRegistrationForm.controls["dob"].value.format('YYYY-MM-DD'),
             ci: voteRegistrationForm.controls["ci"].value,
@@ -104,6 +108,8 @@ export class HomeContentComponent implements OnInit, AfterViewInit {
     cancel() {
         this.goHome()
         this.voteRegistrationForm.reset();
+        this.noteForm.reset();
+        this.closeForm.reset();
     }
 
     goHome() {
@@ -111,7 +117,6 @@ export class HomeContentComponent implements OnInit, AfterViewInit {
     }
 
     findVotes() {
-
         this.myElectionApiService.findRegisteredVotes(this.token, this.pageInfo.pageIndex, this.pageInfo.pageSize).subscribe(response => {
             this.dataSource = new MatTableDataSource(response.votes);
             this.pageInfo.total = response.total;
@@ -159,6 +164,42 @@ export class HomeContentComponent implements OnInit, AfterViewInit {
         }
     }
 
+    submitNote(noteForm: FormGroup) {
+        if (noteForm.controls["note"] == null || noteForm.controls["note"].value == null || noteForm.controls["note"].value == undefined) {
+            console.warn("why are u calling me !?")
+        } else {
+            this.myElectionApiService.addNote(this.token, {
+                note: noteForm.controls["note"].value
+            }).subscribe(response => {
+                    this.notificationService.show("Nota agregada con exito !")
+                    this.navigate(0);
+                    noteForm.reset()
+                }
+            );
+        }
+    }
+
+    submitCrvClose(closeForm: FormGroup) {
+        this.myElectionApiService.closeCrv(this.token, {
+            note: closeForm.controls["note"].value
+        }).subscribe(response => {
+                this.notificationService.show("CRV cerrada con exito !")
+                this.navigate(0);
+                this.findMyCrv();
+                closeForm.reset()
+            }
+        );
+    }
+
+    tabClick(tabEvent: MatTabChangeEvent) {
+        if (tabEvent.index + 1 == 5) { // means cierre
+            // TODO create an better endpoint for getting the totals
+            this.myElectionApiService.findRegisteredVotes(this.token, 0, 1).subscribe(response => {
+                this.dataSource = new MatTableDataSource(response.votes);
+                this.pageInfo.total = response.total;
+            })
+        }
+    }
 }
 
 

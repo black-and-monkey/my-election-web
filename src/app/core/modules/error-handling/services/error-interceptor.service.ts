@@ -18,14 +18,16 @@ export class ErrorInterceptorService implements HttpInterceptor {
 
         return next.handle(request).pipe(
             catchError((error: HttpErrorResponse) => {
+
+                console.error(JSON.stringify(error));
+                this.notificationService.show(ErrorMessage.GENERIC);
+
                 if (error.error instanceof Error) {
                     // A client-side or network error occurred. Handle it accordingly.
-                    this.notificationService.show(ErrorMessage.GENERIC);
-                    console.error(error.error)
+
                 } else {
                     // The backend returned an unsuccessful response code.
                     // The response body may contain clues as to what went wrong,
-                    this.notificationService.show(error.error.message);
                 }
 
                 // If you want to return a new response:
