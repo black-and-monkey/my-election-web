@@ -41,24 +41,37 @@
 
                 <mat-form-field class="example-full-width" appearance="fill">
                     <mat-label>Nombre completo</mat-label>
-                    <input matInput placeholder="" formControlName="name" #nameInput>
+                    <input matInput placeholder="" formControlName="name">
                     <mat-error>Nombre completo es requerido</mat-error>
                 </mat-form-field>
 
                 <mat-form-field class="example-full-width" appearance="fill">
                     <mat-label>Número cédula</mat-label>
-                    <input matInput placeholder="" formControlName="ci" #ciInput>
+                    <input matInput placeholder="" formControlName="ci" (keypress)="numberOnly($event)" type="text"
+                           pattern="\d*">
                     <mat-error>cédula es requerida</mat-error>
 
                 </mat-form-field>
 
-                <mat-form-field appearance="fill">
+                <mat-form-field class="example-full-width" appearance="fill">
                     <mat-label>Fecha de nacimiento</mat-label>
-                    <input matInput [matDatepicker]="picker" formControlName="dob">
-                    <mat-hint>DD/MM/YYYY</mat-hint>
-                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-                    <mat-datepicker #picker></mat-datepicker>
+                    <input matInput placeholder="ddMMyyyy" formControlName="dob" (keypress)="numberOnly($event)"
+                           type="text" pattern="\d*">
+                    <mat-error>Fecha de nacimiento es requerida</mat-error>
+                    <mat-hint>Formato ddMMyyyy, ingrese la fecha todo junto y sin simbolos, por ejemplo para 1ero de
+                        diciembre de 1999: 01121999
+                    </mat-hint>
                 </mat-form-field>
+
+
+                <!--                <mat-form-field appearance="fill">-->
+                <!--                    <mat-label>Fecha de nacimiento</mat-label>-->
+                <!--                    <input matInput [matDatepicker]="picker" formControlName="dob">-->
+                <!--                    <mat-hint>DD/MM/YYYY</mat-hint>-->
+                <!--                    <mat-datepicker-toggle matSuffix [for]="picker" disabled></mat-datepicker-toggle>-->
+                <!--                    <mat-datepicker #picker></mat-datepicker>-->
+                <!--                </mat-form-field>-->
+                <br>
                 <p>SOLO Fechas entre 6/11/1991 y 5/11/2008</p>
 
                 <br>

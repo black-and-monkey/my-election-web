@@ -48,8 +48,7 @@ import {MatSortModule} from '@angular/material/sort';
 import {MatPaginatorModule} from '@angular/material/paginator';
 import {MatBadgeModule} from "@angular/material/badge";
 import {ReactiveFormsModule} from "@angular/forms";
-import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE, MatNativeDateModule} from "@angular/material/core";
-import {MomentDateAdapter} from "@angular/material-moment-adapter";
+import {MatNativeDateModule} from "@angular/material/core";
 import {ErrorHandlingModule} from "./core/modules/error-handling/error-handling.module";
 
 const materialModules = [
@@ -88,18 +87,6 @@ const materialModules = [
   MatNativeDateModule
 ];
 
-const MY_DATE_FORMAT = {
-  parse: {
-    dateInput: 'yyyy-MM-dd', // this is how your date will be parsed from Input
-  },
-  display: {
-    dateInput: 'DD/MM/YYYY', // this is how your date will get displayed on the Input
-    monthYearLabel: 'MMMM YYYY',
-    dateA11yLabel: 'LL',
-    monthYearA11yLabel: 'MMMM YYYY'
-  }
-};
-
 @NgModule({
   declarations: [
     AppComponent,
@@ -130,8 +117,6 @@ const MY_DATE_FORMAT = {
     ErrorHandlingModule
   ],
   providers: [
-    {provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE]},
-    {provide: MAT_DATE_FORMATS, useValue: MY_DATE_FORMAT},
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthHttpInterceptor,

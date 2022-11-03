@@ -8,6 +8,7 @@ import {MatTableDataSource} from "@angular/material/table";
 import {MatSort} from "@angular/material/sort";
 import {MatPaginator, PageEvent} from "@angular/material/paginator";
 import {MatTabChangeEvent} from "@angular/material/tabs";
+import {DateAdapter} from "@angular/material/core";
 
 @Component({
     selector: 'app-home-content',
@@ -20,7 +21,9 @@ export class HomeContentComponent implements OnInit, AfterViewInit {
     constructor(public auth: AuthService,
                 private myElectionApiService: MyElectionApiService,
                 private fb: FormBuilder,
-                private notificationService: NotificationService) {
+                private notificationService: NotificationService,
+                private dateAdapter: DateAdapter<Date>) {
+        this.dateAdapter.setLocale('en-GB'); //dd/MM/yyyy
     }
 
     myCrv: CrvResponse;
@@ -51,6 +54,7 @@ export class HomeContentComponent implements OnInit, AfterViewInit {
             name: [null, [Validators.required]],
             ci: [null, [Validators.required]],
             dob: [null, [Validators.required]]
+
         })
 
         this.noteForm = this.fb.group({
@@ -96,8 +100,9 @@ export class HomeContentComponent implements OnInit, AfterViewInit {
 
 
     submitVoter() {
+        console.log(this.voteRegistrationForm.controls["dob"])
         this.myElectionApiService.voteRegistration(this.token, {
-            dob: this.voteRegistrationForm.controls["dob"].value.format('YYYY-MM-DD'),
+            dob: this.change2iso(this.voteRegistrationForm.controls["dob"].value),
             ci: this.voteRegistrationForm.controls["ci"].value,
             fullName: this.voteRegistrationForm.controls["name"].value
         }).subscribe(response => {
@@ -106,6 +111,10 @@ export class HomeContentComponent implements OnInit, AfterViewInit {
                 this.voteRegistrationForm.reset()
             }
         );
+    }
+
+    change2iso(aDate: any) {
+        return aDate.substring(4, 8) + "-" + aDate.substring(2, 4) + "-" + aDate.substring(0, 2);
     }
 
     cancel() {
@@ -206,6 +215,17 @@ export class HomeContentComponent implements OnInit, AfterViewInit {
             this.findMyCrv();
         }
     }
+
+    numberOnly(event): boolean {
+        const charCode = (event.which) ? event.which : event.keyCode;
+        if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+            return false;
+        }
+        return true;
+
+    }
+
+
 }
 
 
