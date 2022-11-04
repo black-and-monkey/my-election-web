@@ -53,16 +53,38 @@
 
                 </mat-form-field>
 
-                <p>SOLO Fechas entre 6/11/1991 y 5/11/2008</p>
-                <mat-form-field class="example-full-width" appearance="fill">
-                    <mat-label>Fecha de nacimiento</mat-label>
-                    <input matInput placeholder="ddMMyyyy" formControlName="dob" (keypress)="numberOnly($event)"
-                           type="text" pattern="\d*">
-                    <mat-error>Fecha de nacimiento es requerida</mat-error>
-                </mat-form-field>
+                <div>
+                    SOLO Fechas entre 6/11/1991 y 5/11/2008
+                </div>
 
-                <p>Formato ddMMyyyy, ingrese la fecha todo junto y sin simbolos, por ejemplo para 1ero de diciembre de
-                    1999: 01121999</p>
+                <div>
+                    <mat-form-field appearance="standard">
+                        <mat-label>Dia de nacimiento</mat-label>
+                        <mat-select [(value)]="selectedDboDay" (selectionChange)="dobValid()">
+                            <mat-option></mat-option>
+                            <mat-option [value]="option.value"
+                                        *ngFor="let option of days">{{ option.viewValue }}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+
+                    <mat-form-field appearance="standard">
+                        <mat-label>Mes de nacimiento</mat-label>
+                        <mat-select [(value)]="selectedDboMonth" (selectionChange)="dobValid()">
+                            <mat-option></mat-option>
+                            <mat-option [value]="option.value"
+                                        *ngFor="let option of months">{{ option.viewValue }}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+
+                    <mat-form-field appearance="standard">
+                        <mat-label>Año de nacimiento</mat-label>
+                        <mat-select [(value)]="selectedDboYear" (selectionChange)="dobValid()">
+                            <mat-option></mat-option>
+                            <mat-option [value]="option.value"
+                                        *ngFor="let option of years">{{ option.viewValue }}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
 
 
                 <!--                <mat-form-field appearance="fill">-->
@@ -76,7 +98,8 @@
                 <br> <br>
                 <div mat-dialog-actions>
                     <button mat-raised-button color="warn" (click)="cancel()" style="float: left;">Cancelar</button>
-                    <button mat-raised-button color="primary" (click)="submitVoter()" style="float: right;">Registrar
+                    <button mat-raised-button color="primary" (click)="submitVoter()" style="float: right;"
+                            disabled="{{!isDboValid}}">Registrar
                     </button>
                 </div>
                 <div>

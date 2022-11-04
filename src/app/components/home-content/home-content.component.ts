@@ -45,6 +45,80 @@ export class HomeContentComponent implements OnInit, AfterViewInit {
         pageSize: 25,
         total: 0
     }
+    days: viewValue[] = [
+        {value: '01', viewValue: '1'},
+        {value: '02', viewValue: '2'},
+        {value: '03', viewValue: '3'},
+        {value: '04', viewValue: '4'},
+        {value: '05', viewValue: '5'},
+        {value: '06', viewValue: '6'},
+        {value: '07', viewValue: '7'},
+        {value: '08', viewValue: '8'},
+        {value: '09', viewValue: '9'},
+        {value: '10', viewValue: '10'},
+        {value: '11', viewValue: '11'},
+        {value: '12', viewValue: '12'},
+        {value: '13', viewValue: '13'},
+        {value: '14', viewValue: '14'},
+        {value: '15', viewValue: '15'},
+        {value: '16', viewValue: '16'},
+        {value: '17', viewValue: '17'},
+        {value: '18', viewValue: '18'},
+        {value: '19', viewValue: '19'},
+        {value: '20', viewValue: '20'},
+        {value: '21', viewValue: '21'},
+        {value: '22', viewValue: '22'},
+        {value: '23', viewValue: '23'},
+        {value: '24', viewValue: '24'},
+        {value: '25', viewValue: '25'},
+        {value: '26', viewValue: '26'},
+        {value: '27', viewValue: '27'},
+        {value: '28', viewValue: '28'},
+        {value: '29', viewValue: '29'},
+        {value: '30', viewValue: '30'},
+        {value: '31', viewValue: '31'}
+    ];
+
+    months: viewValue[] = [
+        {value: '01', viewValue: '1'},
+        {value: '02', viewValue: '2'},
+        {value: '03', viewValue: '3'},
+        {value: '04', viewValue: '4'},
+        {value: '05', viewValue: '5'},
+        {value: '06', viewValue: '6'},
+        {value: '07', viewValue: '7'},
+        {value: '08', viewValue: '8'},
+        {value: '09', viewValue: '9'},
+        {value: '10', viewValue: '10'},
+        {value: '11', viewValue: '11'},
+        {value: '12', viewValue: '12'}
+    ];
+
+    years: viewValue[] = [
+        {value: '1991', viewValue: '1991'},
+        {value: '1992', viewValue: '1992'},
+        {value: '1993', viewValue: '1993'},
+        {value: '1994', viewValue: '1994'},
+        {value: '1995', viewValue: '1995'},
+        {value: '1996', viewValue: '1996'},
+        {value: '1997', viewValue: '1997'},
+        {value: '1998', viewValue: '1998'},
+        {value: '1999', viewValue: '1999'},
+        {value: '2000', viewValue: '2000'},
+        {value: '2001', viewValue: '2001'},
+        {value: '2002', viewValue: '2002'},
+        {value: '2003', viewValue: '2003'},
+        {value: '2004', viewValue: '2004'},
+        {value: '2005', viewValue: '2005'},
+        {value: '2006', viewValue: '2006'},
+        {value: '2007', viewValue: '2007'},
+        {value: '2008', viewValue: '2008'},
+
+    ];
+    selectedDboDay = "06";
+    selectedDboMonth = "11";
+    selectedDboYear = "1991";
+    isDboValid = true;
 
     ngOnInit() {
 
@@ -52,9 +126,7 @@ export class HomeContentComponent implements OnInit, AfterViewInit {
 
         this.voteRegistrationForm = this.fb.group({
             name: [null, [Validators.required]],
-            ci: [null, [Validators.required]],
-            dob: [null, [Validators.required]]
-
+            ci: [null, [Validators.required]]
         })
 
         this.noteForm = this.fb.group({
@@ -100,9 +172,9 @@ export class HomeContentComponent implements OnInit, AfterViewInit {
 
 
     submitVoter() {
-        console.log(this.voteRegistrationForm.controls["dob"])
+
         this.myElectionApiService.voteRegistration(this.token, {
-            dob: this.change2iso(this.voteRegistrationForm.controls["dob"].value),
+            dob: this.selectedDboYear + "-" + this.selectedDboMonth + "-" + this.selectedDboDay,
             ci: this.voteRegistrationForm.controls["ci"].value,
             fullName: this.voteRegistrationForm.controls["name"].value
         }).subscribe(response => {
@@ -111,10 +183,6 @@ export class HomeContentComponent implements OnInit, AfterViewInit {
                 this.voteRegistrationForm.reset()
             }
         );
-    }
-
-    change2iso(aDate: any) {
-        return aDate.substring(4, 8) + "-" + aDate.substring(2, 4) + "-" + aDate.substring(0, 2);
     }
 
     cancel() {
@@ -225,7 +293,24 @@ export class HomeContentComponent implements OnInit, AfterViewInit {
 
     }
 
+    getColor() {
+        return this.dobValid ? "black" : "yellow";
+    }
 
+    minDate = new Date(1991, 11, 6);
+    maxDate = new Date(2008, 11, 5);
+
+
+    dobValid() {
+        let selectedDate = new Date(Number(this.selectedDboYear), Number(this.selectedDboMonth), Number(this.selectedDboDay));
+        this.isDboValid = selectedDate >= this.minDate && selectedDate <= this.maxDate;
+        console.log("SELECTED DAY" + selectedDate.toISOString() + "is valid ? " + this.isDboValid)
+    }
+}
+
+export interface viewValue {
+    value: string;
+    viewValue: string;
 }
 
 
