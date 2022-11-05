@@ -6,6 +6,9 @@
 
         <mat-tab label="Home">
             <br>
+            <div style="font-size: large">
+                CRV: {{myCrv.id}}
+            </div>
             <div>
                 <button mat-raised-button color="primary" [disabled]="myCrv.opened" (click)="openCrv()">Abrir CRV
                 </button>
@@ -27,8 +30,8 @@
                 <button mat-raised-button color="primary" [disabled]="!myCrv.opened" (click)="navigate(4)">Cerrar CRV
                 </button>
             </div>
-            <div>
-                CRV: {{myCrv.description}}
+
+            <div align="right">
                 <button mat-fab color="warn" aria-label="refresh" (click)="findMyCrv()">
                     <mat-icon>refresh</mat-icon>
                 </button>
@@ -53,12 +56,12 @@
 
                 </mat-form-field>
 
-                <div>
+                <div style="font-size: small">
                     SOLO Fechas entre 6/11/1991 y 5/11/2008
                 </div>
 
                 <div>
-                    <mat-form-field appearance="standard">
+                    <mat-form-field appearance="standard" [style.width.%]="30">
                         <mat-label>Dia de nacimiento</mat-label>
                         <mat-select [(value)]="selectedDboDay" (selectionChange)="dobValid()">
                             <mat-option></mat-option>
@@ -67,7 +70,7 @@
                         </mat-select>
                     </mat-form-field>
 
-                    <mat-form-field appearance="standard">
+                    <mat-form-field appearance="standard" [style.width.%]="30">
                         <mat-label>Mes de nacimiento</mat-label>
                         <mat-select [(value)]="selectedDboMonth" (selectionChange)="dobValid()">
                             <mat-option></mat-option>
@@ -76,7 +79,7 @@
                         </mat-select>
                     </mat-form-field>
 
-                    <mat-form-field appearance="standard">
+                    <mat-form-field appearance="standard" [style.width.%]="40">
                         <mat-label>Año de nacimiento</mat-label>
                         <mat-select [(value)]="selectedDboYear" (selectionChange)="dobValid()">
                             <mat-option></mat-option>

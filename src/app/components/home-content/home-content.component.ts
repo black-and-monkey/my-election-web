@@ -115,10 +115,10 @@ export class HomeContentComponent implements OnInit, AfterViewInit {
         {value: '2008', viewValue: '2008'},
 
     ];
-    selectedDboDay = "06";
+    selectedDboDay = "05";
     selectedDboMonth = "11";
     selectedDboYear = "1991";
-    isDboValid = true;
+    isDboValid = false;
 
     ngOnInit() {
 
@@ -291,10 +291,6 @@ export class HomeContentComponent implements OnInit, AfterViewInit {
         }
         return true;
 
-    }
-
-    getColor() {
-        return this.dobValid ? "black" : "yellow";
     }
 
     minDate = new Date(1991, 11, 6);
