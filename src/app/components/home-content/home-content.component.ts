@@ -179,8 +179,11 @@ export class HomeContentComponent implements OnInit, AfterViewInit {
             fullName: this.voteRegistrationForm.controls["name"].value
         }).subscribe(response => {
                 this.notificationService.show("votante registrado con exito !")
-                this.navigate(0);
                 this.voteRegistrationForm.reset()
+                this.selectedDboDay = "05";
+                this.selectedDboMonth = "11";
+                this.selectedDboYear = "1991";
+                this.navigate(0);
             }
         );
     }
