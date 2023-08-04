@@ -8,7 +8,7 @@ import {Observable} from "rxjs";
 export class MyElectionApiService implements OnInit {
 
   //apiUrl = "http://localhost:3010"
-  apiUrl = "https://my-election-api-3f77fd47f16a.herokuapp.com/"
+  apiUrl = "https://my-election-api-3f77fd47f16a.herokuapp.com"
 
   constructor(
       protected readonly http: HttpClient
