@@ -94,58 +94,21 @@ export class HomeContentComponent implements OnInit, AfterViewInit {
         {value: '12', viewValue: '12'}
     ];
 
-    years: viewValue[] = [
-        {value: '1970', viewValue: '1970'},
-        {value: '1971', viewValue: '1971'},
-        {value: '1972', viewValue: '1972'},
-        {value: '1973', viewValue: '1973'},
-        {value: '1974', viewValue: '1974'},
-        {value: '1975', viewValue: '1975'},
-        {value: '1976', viewValue: '1976'},
-        {value: '1977', viewValue: '1977'},
-        {value: '1978', viewValue: '1978'},
-        {value: '1979', viewValue: '1979'},
+    years: viewValue[] = [];
 
-        {value: '1980', viewValue: '1980'},
-        {value: '1981', viewValue: '1981'},
-        {value: '1982', viewValue: '1982'},
-        {value: '1983', viewValue: '1983'},
-        {value: '1984', viewValue: '1984'},
-        {value: '1985', viewValue: '1985'},
-        {value: '1986', viewValue: '1986'},
-        {value: '1987', viewValue: '1987'},
-        {value: '1988', viewValue: '1988'},
-        {value: '1989', viewValue: '1989'},
-
-        {value: '1990', viewValue: '1990'},
-        {value: '1991', viewValue: '1991'},
-        {value: '1992', viewValue: '1992'},
-        {value: '1993', viewValue: '1993'},
-        {value: '1994', viewValue: '1994'},
-        {value: '1995', viewValue: '1995'},
-        {value: '1996', viewValue: '1996'},
-        {value: '1997', viewValue: '1997'},
-        {value: '1998', viewValue: '1998'},
-        {value: '1999', viewValue: '1999'},
-
-        {value: '2000', viewValue: '2000'},
-        {value: '2001', viewValue: '2001'},
-        {value: '2002', viewValue: '2002'},
-        {value: '2003', viewValue: '2003'},
-        {value: '2004', viewValue: '2004'},
-        {value: '2005', viewValue: '2005'},
-        {value: '2006', viewValue: '2006'},
-        {value: '2007', viewValue: '2007'},
-        {value: '2008', viewValue: '2008'},
-        {value: '2009', viewValue: '2009'},
-
-    ];
     selectedDboDay = "06";
     selectedDboMonth = "08";
     selectedDboYear = "2009";
     isDboValid = false;
 
     ngOnInit() {
+
+        for (let year= 1930; year <= 2009; year++) {
+            this.years.push({
+                value: year.toString(),
+                viewValue: year.toString(),
+            });
+        }
 
         this.loading = true;
 
@@ -321,8 +284,8 @@ export class HomeContentComponent implements OnInit, AfterViewInit {
 
     }
 
-    minDate = new Date(1970, 1, 1);
-    maxDate = new Date(2025, 12, 31);
+    minDate = new Date(1930, 1, 1);
+    maxDate = new Date(2009, 8, 7);
 
 
     dobValid() {
