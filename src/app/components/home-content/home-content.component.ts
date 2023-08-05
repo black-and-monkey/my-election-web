@@ -321,7 +321,7 @@ export class HomeContentComponent implements OnInit, AfterViewInit {
 
     }
 
-    minDate = new Date(2009, 8, 6);
+    minDate = new Date(1970, 1, 1);
     maxDate = new Date(2025, 12, 31);
 
 
